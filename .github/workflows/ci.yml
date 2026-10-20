@@ -1,0 +1,27 @@
+name: PacketForge checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizers: ["OFF", "ON"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake libpcap-dev python3
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DPACKETFORGE_SANITIZERS=${{ matrix.sanitizers }}
+      - name: Build
+        run: cmake --build build -j2
+      - name: Test
+        env:
+          ASAN_OPTIONS: detect_leaks=1
+          UBSAN_OPTIONS: halt_on_error=1
+        run: ctest --test-dir build --output-on-failure
+      - name: Confirm deterministic fixtures
+        run: python3 scripts/generate_fixtures.py && git diff --exit-code -- samples/

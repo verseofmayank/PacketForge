@@ -39,3 +39,20 @@ the shared pipeline. `include/headers.hpp` will expose decoded packet types inst
 of unsafe on-wire struct layouts. `include/rules.hpp` will preserve first-match
 policy evaluation with accurate simulation names. Subsequent implementation and
 validation details are recorded in `PROGRESS.md` and `docs/TESTING.md`.
+
+## Implemented corrections
+
+The new CMake pipeline replaces buffer overlays with bounded decoding and uses
+libpcap for offline capture. `sniffer.cpp` and `forwarder.cpp` are compatibility
+entry points to the same CLI; the latter explicitly selects policy simulation.
+The original first-match behavior now loads validated configuration and produces
+WOULD_ALLOW/WOULD_BLOCK. No enforcement was added. `headers.hpp` redirects to safe
+metadata types. IPv4 IHL support was retained and validated, rather than incorrectly
+claiming the baseline always used a fixed 20-byte IP header.
+
+Bounded flows, protocol/talker statistics, five explainable IDS rules, structured
+alerts and local JSON/CSV/HTML reports now exist. Synthetic fixture generation,
+unit/integration/live tests and sanitizer configuration replace the previous absence
+of tests. README and interview documentation describe actual capabilities and
+explicitly exclude forwarding, stream reconstruction, DNS inspection and PCAPNG.
+See `docs/TESTING.md` and its linked raw logs for executed validation and limitations.

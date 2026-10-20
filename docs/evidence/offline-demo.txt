@@ -1,0 +1,82 @@
+PacketForge | analyze | samples/demo.pcap | IDS enabled
+
+PacketForge | Investigation summary
+Packets: 9 | Observed bytes: 498 | Wire bytes: 498
+Truncated: 0 | Malformed: 0 | Unsupported: 0
+Protocols: ARP=1 Ethernet=9 ICMP=3 IPv4=7 IPv6=1 TCP=4 UDP=1
+Observation interval: 0.400 s | Packets/s: 22.5 | Bytes/s: 1245.0
+Unique directional flows: 3 | Active: 3 | IDS alerts: 0
+top_sources: 192.0.2.10=7 198.51.100.20=1 2001:db8::1=1
+top_destinations: 198.51.100.20=6 192.0.2.10=1 192.0.2.20=1 2001:db8::2=1
+destination_ports: 443=3 53=1 40000=1
+PacketForge | analyze | samples/portscan.pcap | IDS enabled
+[MEDIUM] POSSIBLE_TCP_PORT_SCAN | 2023-11-14T22:13:20.550000000Z | 192.0.2.10 -> 198.51.100.20 | observed=12 threshold=12 window=10s
+
+PacketForge | Investigation summary
+Packets: 13 | Observed bytes: 702 | Wire bytes: 702
+Truncated: 0 | Malformed: 0 | Unsupported: 0
+Protocols: Ethernet=13 IPv4=13 TCP=13
+Observation interval: 0.600 s | Packets/s: 21.666666666666668 | Bytes/s: 1170.0
+Unique directional flows: 13 | Active: 13 | IDS alerts: 1
+top_sources: 192.0.2.10=13
+top_destinations: 198.51.100.20=13
+destination_ports: 1000=1 1001=1 1002=1 1003=1 1004=1 1005=1 1006=1 1007=1 1008=1 1009=1
+  POSSIBLE_TCP_PORT_SCAN: 1
+PacketForge | analyze | samples/synrate.pcap | IDS enabled
+[MEDIUM] HIGH_TCP_SYN_RATE | 2023-11-14T22:13:24.950000000Z | 192.0.2.10 -> 198.51.100.20 | observed=100 threshold=100 window=10s
+
+PacketForge | Investigation summary
+Packets: 101 | Observed bytes: 5454 | Wire bytes: 5454
+Truncated: 0 | Malformed: 0 | Unsupported: 0
+Protocols: Ethernet=101 IPv4=101 TCP=101
+Observation interval: 5.000 s | Packets/s: 20.2 | Bytes/s: 1090.8
+Unique directional flows: 1 | Active: 1 | IDS alerts: 1
+top_sources: 192.0.2.10=101
+top_destinations: 198.51.100.20=101
+destination_ports: 443=101
+  HIGH_TCP_SYN_RATE: 1
+PacketForge | analyze | samples/malformed.pcap | IDS enabled
+2023-11-14T22:13:20.000000000Z Ethernet-other []:0 -> []:0 cap=25 wire=54 status=truncated mac=02:00:00:00:00:01->02:00:00:00:00:02 ethertype=2048 (captured header incomplete)
+2023-11-14T22:13:20.100000000Z Ethernet-other []:0 -> []:0 cap=54 wire=54 status=malformed mac=02:00:00:00:00:01->02:00:00:00:00:02 ethertype=2048 (invalid IPv4 version or IHL)
+
+PacketForge | Investigation summary
+Packets: 2 | Observed bytes: 79 | Wire bytes: 108
+Truncated: 1 | Malformed: 1 | Unsupported: 0
+Protocols: Ethernet=2
+Observation interval: 0.100 s | Packets/s: 20.0 | Bytes/s: 790.0
+Unique directional flows: 0 | Active: 0 | IDS alerts: 0
+top_sources:
+top_destinations:
+destination_ports:
+PacketForge | analyze | samples/sensitive.pcap | IDS enabled
+Firewall Policy Simulation: no traffic is blocked or forwarded
+[INFO] SENSITIVE_SERVICE_TRAFFIC | 2023-11-14T22:13:20.000000000Z | 192.0.2.10 -> 198.51.100.20 | observed=1 threshold=1 window=10s
+Source: 192.0.2.10 | Destination: [198.51.100.20]:22 | Policy: WOULD_BLOCK
+
+PacketForge | Investigation summary
+Packets: 1 | Observed bytes: 54 | Wire bytes: 54
+Truncated: 0 | Malformed: 0 | Unsupported: 0
+Protocols: Ethernet=1 IPv4=1 TCP=1
+Observation interval: 0.000 s | Packets/s: n/a | Bytes/s: n/a
+Unique directional flows: 1 | Active: 1 | IDS alerts: 1
+top_sources: 192.0.2.10=1
+top_destinations: 198.51.100.20=1
+destination_ports: 22=1
+  SENSITIVE_SERVICE_TRAFFIC: 1
+PacketForge | analyze | samples/mixed.pcap | IDS enabled
+[MEDIUM] POSSIBLE_TCP_PORT_SCAN | 2023-11-14T22:13:21.800000000Z | 192.0.2.10 -> 198.51.100.20 | observed=12 threshold=12 window=10s
+
+PacketForge | Investigation summary
+Packets: 21 | Observed bytes: 1147 | Wire bytes: 1147
+Truncated: 0 | Malformed: 0 | Unsupported: 0
+Protocols: ARP=1 Ethernet=21 ICMP=2 IPv4=19 IPv6=1 TCP=17 UDP=1
+Observation interval: 2.000 s | Packets/s: 10.5 | Bytes/s: 573.5
+Unique directional flows: 16 | Active: 16 | IDS alerts: 1
+top_sources: 192.0.2.10=19 198.51.100.20=1 2001:db8::1=1
+top_destinations: 198.51.100.20=18 192.0.2.10=1 192.0.2.20=1 2001:db8::2=1
+destination_ports: 443=3 53=1 1000=1 1001=1 1002=1 1003=1 1004=1 1005=1 1006=1 1007=1
+  POSSIBLE_TCP_PORT_SCAN: 1
+Report: reports/demo-dpOhHa/investigation.json
+Report: reports/demo-dpOhHa/investigation.html
+Report: reports/demo-dpOhHa/investigation-alerts.csv
+Report: reports/demo-dpOhHa/investigation-flows.csv
