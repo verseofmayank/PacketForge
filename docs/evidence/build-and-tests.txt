@@ -1,0 +1,51 @@
+$ cmake -S /mnt/c/Users/mayank/Downloads/PacketForge -B /tmp/packetforge-release -DCMAKE_BUILD_TYPE=Release -DPACKETFORGE_SANITIZERS=OFF
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Python3: /home/mayhack/.local/bin/python3.11 (found version "3.11.16") found components: Interpreter
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/packetforge-release
+$ cmake --build /tmp/packetforge-release --clean-first -j 2
+[  5%] Building CXX object CMakeFiles/packetforge_core.dir/src/parsers/packet.cpp.o
+[ 10%] Building CXX object CMakeFiles/packetforge_core.dir/src/capture/pcap.cpp.o
+[ 15%] Building CXX object CMakeFiles/packetforge_core.dir/src/capture/live.cpp.o
+[ 21%] Building CXX object CMakeFiles/packetforge_core.dir/src/detection/config.cpp.o
+[ 26%] Building CXX object CMakeFiles/packetforge_core.dir/src/detection/detection.cpp.o
+[ 31%] Building CXX object CMakeFiles/packetforge_core.dir/src/flows/flows.cpp.o
+[ 36%] Building CXX object CMakeFiles/packetforge_core.dir/src/statistics/statistics.cpp.o
+[ 42%] Building CXX object CMakeFiles/packetforge_core.dir/src/statistics/analysis.cpp.o
+[ 47%] Building CXX object CMakeFiles/packetforge_core.dir/src/reporting/reporting.cpp.o
+[ 52%] Building CXX object CMakeFiles/packetforge_core.dir/src/cli.cpp.o
+[ 57%] Linking CXX static library libpacketforge_core.a
+[ 57%] Built target packetforge_core
+[ 68%] Building CXX object CMakeFiles/packetforge.dir/src/main.cpp.o
+[ 68%] Building CXX object CMakeFiles/sniffer.dir/src/sniffer.cpp.o
+[ 73%] Linking CXX executable sniffer
+[ 78%] Linking CXX executable packetforge
+[ 78%] Built target packetforge
+[ 78%] Built target sniffer
+[ 84%] Building CXX object CMakeFiles/packetforge_tests.dir/tests/unit.cpp.o
+[ 89%] Building CXX object CMakeFiles/forwarder.dir/src/forwarder.cpp.o
+[ 94%] Linking CXX executable forwarder
+[ 94%] Built target forwarder
+[100%] Linking CXX executable packetforge_tests
+[100%] Built target packetforge_tests
+$ ctest --test-dir /tmp/packetforge-release -LE host --output-on-failure
+Internal ctest changing into directory: /tmp/packetforge-release
+Test project /tmp/packetforge-release
+    Start 1: unit
+1/2 Test #1: unit .............................   Passed    0.02 sec
+    Start 3: integration
+2/2 Test #3: integration ......................   Passed    0.60 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.62 sec
+$ /tmp/packetforge-release/packetforge_tests
+10153 checks passed
+$ /usr/bin/python3 /mnt/c/Users/mayank/Downloads/PacketForge/tests/integration.py /tmp/packetforge-release/packetforge /mnt/c/Users/mayank/Downloads/PacketForge
+68 CLI/fixture subprocess checks passed; JSON, CSV, HTML and config assertions passed

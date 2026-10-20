@@ -1,20 +1,15 @@
 #pragma once
-#include <cstdint>
-#include <string>
-#include <vector>
-
-enum class Action { ALLOW, DROP };
-
-struct Rule {
-    std::string src_ip;   // "any" = match all
-    std::string dst_ip;   // "any" = match all
-    int dst_port;         // -1 = match all
-    Action action;
-};
-
-// Simple rule table — checked top to bottom, first match wins
-inline std::vector<Rule> ruleTable = {
-    { "any", "any", 22,  Action::DROP  },   // block SSH traffic
-    { "any", "any", 445, Action::DROP  },   // block SMB (common attack port)
-    { "any", "any", -1,  Action::ALLOW }    // default: allow everything else
-};
+#include "packetforge/config.hpp"
+#include "packetforge/packet.hpp"
+namespace packetforge {
+// Original first-match source/destination/port logic, now explicitly simulation.
+inline std::string evaluate_policy(const Packet& packet, const std::vector<PolicyRule>& rules) {
+    for (const auto& rule : rules) {
+        if ((rule.source == "any" || rule.source == packet.source)
+            && (rule.destination == "any" || rule.destination == packet.destination)
+            && (rule.destination_port == -1 || (packet.transport && (packet.protocol == 6 || packet.protocol == 17)
+                && rule.destination_port == packet.destination_port))) return rule.action;
+    }
+    return "WOULD_ALLOW";
+}
+}

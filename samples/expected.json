@@ -1,0 +1,66 @@
+{
+  "normal_tcp.pcap": {
+    "packets": 4,
+    "alerts": []
+  },
+  "normal_udp_dns.pcap": {
+    "packets": 2,
+    "alerts": []
+  },
+  "arp.pcap": {
+    "packets": 1,
+    "alerts": []
+  },
+  "icmp.pcap": {
+    "packets": 2,
+    "alerts": []
+  },
+  "portscan.pcap": {
+    "packets": 13,
+    "alerts": [
+      "POSSIBLE_TCP_PORT_SCAN"
+    ]
+  },
+  "synrate.pcap": {
+    "packets": 101,
+    "alerts": [
+      "HIGH_TCP_SYN_RATE"
+    ]
+  },
+  "icmp_rate.pcap": {
+    "packets": 51,
+    "alerts": [
+      "HIGH_ICMP_ECHO_RATE"
+    ]
+  },
+  "concentration.pcap": {
+    "packets": 41,
+    "alerts": [
+      "CONNECTION_CONCENTRATION"
+    ]
+  },
+  "sensitive.pcap": {
+    "packets": 1,
+    "alerts": [
+      "SENSITIVE_SERVICE_TRAFFIC"
+    ]
+  },
+  "ipv6.pcap": {
+    "packets": 1,
+    "alerts": []
+  },
+  "demo.pcap": {
+    "packets": 9,
+    "alerts": []
+  },
+  "malformed.pcap": {
+    "packets": 2,
+    "alerts": []
+  },
+  "mixed.pcap": {
+    "packets": 21,
+    "alerts": [
+      "POSSIBLE_TCP_PORT_SCAN"
+    ]
+  }
+}
