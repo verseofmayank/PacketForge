@@ -122,7 +122,10 @@ Packet parse_packet(const std::uint8_t* data, std::size_t size, std::uint32_t wi
                 malformed(p.protocol == 0 && extensions != 1, "hop-by-hop header must be first");
                 if (end - o < 2) throw Failure{ParseStatus::malformed, "IPv6 extension exceeds payload"};
                 std::size_t length = (std::size_t(b.u8(o+1)) + 1) * 8;
-                if (p.protocol == 51) length = (std::size_t(b.u8(o+1)) + 2) * 4;
+                if (p.protocol == 51) {
+                    length = (std::size_t(b.u8(o+1)) + 2) * 4;
+                    malformed(length < 12, "IPv6 AH header smaller than fixed fields");
+                }
                 if (p.protocol == 44) {
                     malformed(seen_fragment, "duplicate IPv6 fragment header"); seen_fragment = true; length = 8;
                     malformed(end - o < length, "IPv6 fragment exceeds payload"); b.need(o, length);

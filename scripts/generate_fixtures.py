@@ -28,8 +28,8 @@ def ipv4(payload, proto=6, src='192.0.2.10', dst='198.51.100.20', flags=0, optio
     header = header[:10] + struct.pack('!H', checksum(header)) + header[12:]
     return header + payload
 
-def tcp(port=443, sport=40000, flags=2, seq=1, src='192.0.2.10', dst='198.51.100.20'):
-    segment = struct.pack('!HHIIBBHHH', sport, port, seq, 0, 0x50, flags, 65535, 0, 0)
+def tcp(port=443, sport=40000, flags=2, seq=1, ack=0, src='192.0.2.10', dst='198.51.100.20'):
+    segment = struct.pack('!HHIIBBHHH', sport, port, seq, ack, 0x50, flags, 65535, 0, 0)
     pseudo = ipaddress.ip_address(src).packed + ipaddress.ip_address(dst).packed + struct.pack('!BBH',0,6,len(segment))
     segment = segment[:16] + struct.pack('!H',checksum(pseudo+segment)) + segment[18:]
     return ethernet(ipv4(segment,src=src,dst=dst))
@@ -68,11 +68,11 @@ def write(name, packets, endian='<', nano=False, linktype=1):
 
 def generate():
     (ROOT/'samples').mkdir(exist_ok=True)
-    normal=[tcp(),tcp(40000,443,0x12,src='198.51.100.20',dst='192.0.2.10'),tcp(flags=0x10),tcp(flags=0x11)]
+    normal=[tcp(),tcp(40000,443,0x12,seq=500,ack=2,src='198.51.100.20',dst='192.0.2.10'),tcp(flags=0x10,seq=2,ack=501),tcp(flags=0x11,seq=2,ack=501)]
     dns=struct.pack('!HHHHHH',1,0x0100,1,0,0,0)+b'\x07example\x04test\0'+struct.pack('!HH',1,1)
     cases={'normal_tcp.pcap':normal,'normal_udp_dns.pcap':[udp(),udp(dns,53)],'arp.pcap':[arp()],
            'icmp.pcap':[icmp(),icmp(True)],'portscan.pcap':[tcp(port=1000+i) for i in range(13)],
-           'synrate.pcap':[tcp(seq=i) for i in range(101)],'icmp_rate.pcap':[icmp() for _ in range(51)],
+           'synrate.pcap':[tcp() for _ in range(101)],'icmp_rate.pcap':[icmp() for _ in range(51)],
            'concentration.pcap':[tcp(sport=40000+i) for i in range(41)],'sensitive.pcap':[tcp(port=22)],
            'ipv6.pcap':[ipv6()], 'demo.pcap':normal+[udp(dns,53),arp(),icmp(),icmp(True),ipv6()]}
     # Keep all rate scenarios inside the 10-second demonstration window.
